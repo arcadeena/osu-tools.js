@@ -102,7 +102,7 @@ module.exports = {
         });
     },
 
-    simulate(path, options = [], mode = OsuTools.OSU) {
+    simulate(path, options = [], mode = 'osu') {
         return new Promise((resolve, reject) => {
             const chunks = [];
             const calculator = spawn('dotnet', [`${path}/PerformanceCalculator.dll`, 'simulate', mode, path].concat(options));
