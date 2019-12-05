@@ -110,7 +110,6 @@ module.exports = {
             calculator.stderr.on('data', (data) => reject(data.toString()));
             calculator.on('exit', (code) => {
                 const data = chunks.join('');
-                console.log(data);
                 const simulated = {
                     title: /^(.*)$/m.exec(data)[1],
                     accuracy_achieved: Number(/^Accuracy\s+:\s(\d+(\.\d+)?)%/gm.exec(data)[1]),
