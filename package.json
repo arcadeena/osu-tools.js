@@ -1,0 +1,23 @@
+{
+    "name": "osu-tools.js",
+    "version": "1.0.0",
+    "description": "A JavaScript wrapper for osu-tools.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/arcadeena/osu-tools.js.git"
+    },
+    "keywords": [
+        "osu",
+        "osu-tools"
+    ],
+    "author": "Arcadeena",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/arcadeena/osu-tools.js/issues"
+    },
+    "homepage": "https://github.com/arcadeena/osu-tools.js"
+}
