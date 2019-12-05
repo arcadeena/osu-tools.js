@@ -58,13 +58,13 @@ module.exports = {
                         path: /^(.*)$/m.exec(single)[1],
                         player: /^Player\s+:\s(.+)/gm.exec(single)[1],
                         mods: /^Mods\s+:\s(.+)/gm.exec(single)[1].split(', '),
-                        accuracy: Number(/^Accuracy\s+:\s(\d+(\.\d+)?)$/gm.exec(single)[1]),
-                        speed: Number(/^Speed\s+:\s(\d+(\.\d+)?)/gm.exec(single)[1]),
-                        aim: Number(/^Aim\s+:\s(\d+(\.\d+)?)/gm.exec(single)[1]),
-                        od: Number(/^OD\s+:\s(\d+(\.\d+)?)/gm.exec(single)[1]),
-                        ar: Number(/^AR\s+:\s(\d+(\.\d+)?)/gm.exec(single)[1]),
-                        max_combo: Number(/^Max Combo\s+:\s(\d+(\.\d+)?)/gm.exec(single)[1]),
-                        pp: Number(/^pp\s+:\s(\d+(\.\d+)?)/gm.exec(single)[1])
+                        accuracy: Number(/^Accuracy\s+:\s(-?\d+(\.\d+)?)$/gm.exec(single)[1]),
+                        speed: Number(/^Speed\s+:\s(-?\d+(\.\d+)?)/gm.exec(single)[1]),
+                        aim: Number(/^Aim\s+:\s(-?\d+(\.\d+)?)/gm.exec(single)[1]),
+                        od: Number(/^OD\s+:\s(-?\d+(\.\d+)?)/gm.exec(single)[1]),
+                        ar: Number(/^AR\s+:\s(-?\d+(\.\d+)?)/gm.exec(single)[1]),
+                        max_combo: Number(/^Max Combo\s+:\s(-?\d+(\.\d+)?)/gm.exec(single)[1]),
+                        pp: Number(/^pp\s+:\s(-?\d+(\.\d+)?)/gm.exec(single)[1])
                     };
                 }));
             });
@@ -110,22 +110,23 @@ module.exports = {
             calculator.stderr.on('data', (data) => reject(data.toString()));
             calculator.on('exit', (code) => {
                 const data = chunks.join('');
+                console.log(data);
                 const simulated = {
                     title: /^(.*)$/m.exec(data)[1],
                     accuracy_achieved: Number(/^Accuracy\s+:\s(\d+(\.\d+)?)%/gm.exec(data)[1]),
-                    combo: Number(/^Combo\s+:\s(\d+(\.\d+)?).+/gm.exec(data)[1]),
-                    great: Number(/^Great\s+:\s(\d+(\.\d+)?)/gm.exec(data)[1]),
-                    good: Number(/^Good\s+:\s(\d+(\.\d+)?)/gm.exec(data)[1]),
-                    meh: Number(/^Meh\s+:\s(\d+(\.\d+)?)/gm.exec(data)[1]),
-                    miss: Number(/^Miss\s+:\s(\d+(\.\d+)?)/gm.exec(data)[1]),
+                    combo: Number(/^Combo\s+:\s(-?\d+(\.\d+)?).+/gm.exec(data)[1]),
+                    great: Number(/^Great\s+:\s(-?\d+(\.\d+)?)/gm.exec(data)[1]),
+                    good: Number(/^Good\s+:\s(-?\d+(\.\d+)?)/gm.exec(data)[1]),
+                    meh: Number(/^Meh\s+:\s(-?\d+(\.\d+)?)/gm.exec(data)[1]),
+                    miss: Number(/^Miss\s+:\s(-?\d+(\.\d+)?)/gm.exec(data)[1]),
                     mods: /^Mods\s+:\s(.+)/gm.exec(data)[1].split(', '),
-                    aim: Number(/^Aim\s+:\s(\d+(\.\d+)?)/gm.exec(data)[1]),
-                    speed: Number(/^Speed\s+:\s(\d+(\.\d+)?)/gm.exec(data)[1]),
-                    accuracy: Number(/^Accuracy\s+:\s(\d+(\.\d+)?)$/gm.exec(data)[1]),
-                    od: Number(/^OD\s+:\s(\d+(\.\d+)?)/gm.exec(data)[1]),
-                    ar: Number(/^AR\s+:\s(\d+(\.\d+)?)/gm.exec(data)[1]),
-                    max_combo: Number(/^Max Combo\s+:\s(\d+(\.\d+)?)/gm.exec(data)[1]),
-                    pp: Number(/^pp\s+:\s(\d+(\.\d+)?)/gm.exec(data)[1])
+                    aim: Number(/^Aim\s+:\s(-?\d+(\.\d+)?)/gm.exec(data)[1]),
+                    speed: Number(/^Speed\s+:\s(-?\d+(\.\d+)?)/gm.exec(data)[1]),
+                    accuracy: Number(/^Accuracy\s+:\s(-?\d+(\.\d+)?)$/gm.exec(data)[1]),
+                    od: Number(/^OD\s+:\s(-?\d+(\.\d+)?)/gm.exec(data)[1]),
+                    ar: Number(/^AR\s+:\s(-?\d+(\.\d+)?)/gm.exec(data)[1]),
+                    max_combo: Number(/^Max Combo\s+:\s(-?\d+(\.\d+)?)/gm.exec(data)[1]),
+                    pp: Number(/^pp\s+:\s(-?\d+(\.\d+)?)/gm.exec(data)[1])
                 };
                 resolve(simulated);
             });
