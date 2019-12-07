@@ -106,10 +106,14 @@ module.exports = {
         return new Promise((resolve, reject) => {
             const chunks = [];
             const calculator = spawn('dotnet', [`${toolsPath}/PerformanceCalculator.dll`, 'simulate', mode, path].concat(options));
-            calculator.stdout.on('data', (data) => { chunks.push(data.toString()); });
-            calculator.stderr.on('data', (data) => reject(data.toString()));
+            calculator.stdout.on('data', (data) => chunks.push(data.toString()));
+            calculator.stderr.on('data', (data) => {
+                console.log(data.toString());
+                reject(data.toString());
+            });
             calculator.on('exit', (code) => {
                 const data = chunks.join('');
+                console.log(`DATA: ${data}`);
                 const simulated = {
                     title: /^(.*)$/m.exec(data)[1],
                     accuracy_achieved: Number(/^Accuracy\s+:\s(\d+(\.\d+)?)%/gm.exec(data)[1]),
@@ -119,13 +123,13 @@ module.exports = {
                     meh: Number(/^Meh\s+:\s(-?\d+(\.\d+)?)/gm.exec(data)[1]),
                     miss: Number(/^Miss\s+:\s(-?\d+(\.\d+)?)/gm.exec(data)[1]),
                     mods: /^Mods\s+:\s(.+)/gm.exec(data)[1].split(', '),
-                    aim: Number(/^Aim\s+:\s(-?\d+(\.\d+)?)/gm.exec(data)[1]),
-                    speed: Number(/^Speed\s+:\s(-?\d+(\.\d+)?)/gm.exec(data)[1]),
-                    accuracy: Number(/^Accuracy\s+:\s(-?\d+(\.\d+)?)$/gm.exec(data)[1]),
-                    od: Number(/^OD\s+:\s(-?\d+(\.\d+)?)/gm.exec(data)[1]),
-                    ar: Number(/^AR\s+:\s(-?\d+(\.\d+)?)/gm.exec(data)[1]),
-                    max_combo: Number(/^Max Combo\s+:\s(-?\d+(\.\d+)?)/gm.exec(data)[1]),
-                    pp: Number(/^pp\s+:\s(-?\d+(\.\d+)?)/gm.exec(data)[1])
+                    aim: /^Aim/gm.test(data) ? Number(/^Aim\s+:\s(-?\d+(\.\d+)?)/gm.exec(data)[1]) : NaN,
+                    speed: /^Speed/gm.test(data) ? Number(/^Speed\s+:\s(-?\d+(\.\d+)?)/gm.exec(data)[1]) : NaN,
+                    accuracy: /^Accuracy/gm.test(data) ? Number(/^Accuracy\s+:\s(-?\d+(\.\d+)?)$/gm.exec(data)[1]) : NaN,
+                    od: /^OD/gm.test(data) ? Number(/^OD\s+:\s(-?\d+(\.\d+)?)/gm.exec(data)[1]) : NaN,
+                    ar: /^AR/gm.test(data) ? Number(/^AR\s+:\s(-?\d+(\.\d+)?)/gm.exec(data)[1]) : NaN,
+                    max_combo: /^Max Combo/gm.test(data) ? Number(/^Max Combo\s+:\s(-?\d+(\.\d+)?)/gm.exec(data)[1]) : NaN,
+                    pp: /^pp/gm.test(data) ? Number(/^pp\s+:\s(-?\d+(\.\d+)?)/gm.exec(data)[1]) : NaN
                 };
                 resolve(simulated);
             });
