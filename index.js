@@ -32,7 +32,7 @@ module.exports = {
                 const values = [...data.matchAll(/((?:\d|,)+(\.\d+)?)/gm)].map(match => match[1]);
                 resolve({
                     ruleset: /^Ruleset:\s(.+)/gm.exec(data)[1],
-                    title: /^[\│\║\�](\d+.+?)[\│\║\�]/gm.exec(data)[1].trim(),
+                    title: /^[\│\║\�](.+?)[\│\║\�]/gm.exec(data)[1].trim(),
                     beatmap_id: values[0],
                     stars: Number(values[values.length - 6]),
                     aim: Number(values[values.length - 5]),
