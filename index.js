@@ -10,7 +10,7 @@ module.exports = {
     COMBO: '--combo',
     GOODS: '--goods',
     MEHS: '--mehs',
-    MOD: '--mod',
+    MOD: '-m',
 
     CATCH: 'catch',
     TAIKO: 'taiko',
@@ -28,18 +28,18 @@ module.exports = {
             calculator.stdout.on('data', (data) => { chunks.push(data.toString()); });
             calculator.stderr.on('data', (data) => reject(data.toString()));
             calculator.on('exit', (code) => {
-                const data = chunks.join('');
+                const data = chunks.join('').replace(/\,/g, '.');
                 const values = [...data.matchAll(/((?:\d|,)+(\.\d+)?)/gm)].map(match => match[1]);
                 resolve({
                     ruleset: /^Ruleset:\s(.+)/gm.exec(data)[1],
                     title: /^[\│\║\�](\d+.+?)[\│\║\�]/gm.exec(data)[1].trim(),
                     beatmap_id: values[0],
-                    stars: values[values.length - 6],
-                    aim: values[values.length - 5],
-                    speed: values[values.length - 4],
-                    max_combo: values[values.length - 3],
-                    ar: values[values.length - 2],
-                    od: values[values.length - 1],
+                    stars: Number(values[values.length - 6]),
+                    aim: Number(values[values.length - 5]),
+                    speed: Number(values[values.length - 4]),
+                    max_combo: Number(values[values.length - 3]),
+                    ar: Number(values[values.length - 2]),
+                    od: Number(values[values.length - 1]),
                 });
             });
         });
